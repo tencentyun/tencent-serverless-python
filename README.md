@@ -128,13 +128,14 @@ except Exception as e:
 | namespace     |    否    | string | 命名空间，默认为default |
 
 ### TencentServerlessSDKException
-属性
+#### 属性
 - [__code__]
 - [__message__]
 - [__request_id__]
 - [__response__]
 - [__stack_trace__]
-方法
+
+#### 方法
 - [__get_code__]
 ```
 返回错误码信息
