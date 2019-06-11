@@ -1,0 +1,8 @@
+
+venv/
+
+tencentserverless\.egg-info/
+
+\.idea/
+
+*.pyc
