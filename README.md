@@ -15,7 +15,7 @@ tencent-serverless-python是腾讯云无服务器云函数SDK，集成云函数�
 通过tencent serverless SDK，你可以：
 
 * 快速进行函数之间的调用
-* 填写必须的参数即可使用（sdk会默认获取本机的参数如region, secretId等）
+* 填写必须的参数即可使用（SDK会默认获取环境变量中的参数如region, secretId等）
 * 支持内网域名的访问
 * 支持keepalive能力
 
@@ -178,10 +178,3 @@ except Exception as e:
 ```
 返回stack_trace信息
 ```
-
-## TODO List
-* [ ] 支持管理流接口
-
-## Licence
-
-[MIT](./LICENSE)
