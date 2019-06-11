@@ -23,87 +23,103 @@ tencent-serverless-python是腾讯云无服务器云函数SDK，集成云函数�
 
 tencent serverless SDK可以在 Windows、Linux、Mac 上运行。由于该SDK基于 Python 开发完成，因此在安装及运行前需要系统中安装有 Python 环境和pip。此外，该SDK也可以直接在云端进行调用。
 
-## 安装tencent serverless SDK
+## 快速开始
+
+### 本地SDK函数互调
+
+#### 安装tencent serverless SDK
 
 ```shell
 pip install tencentserverless
 ```
 
-## 使用示例
+#### 升级tencent serverless SDK
 
-### Example01
+```shell
+pip install tencentserverless -U
+```
 
-本地测试：
+#### 查看tencent serverless 信息
+
+```shell
+pip list | grep tencentserverless
+```
+
+#### 调用示例
+
+首先在云端创建一个被调用的Python云函数，地域为广州，命名为‘FuncInvoked’。函数内容如下：
 ```python
+# -*- coding: utf8 -*-
+def main_handler(event, context):
+    if 'key1' in event.keys():
+        print("value1 = " + event['key1'])
+    if 'key2' in event.keys():
+        print("value2 = " + event['key2'])
+    return "Hello World form the function being invoked"  #return
+```
+创建完毕后，本地创建一个名为scfSDK.py的函数，内容如下：
+```python
+# -*- coding: utf8 -*-
 from tencentserverless import scf
 from tencentserverless.exception import TencentServerlessSDKException
+from tencentcloud.common.exception.tencent_cloud_sdk_exception import TencentCloudSDKException
 
-try:
-    data = scf.invoke('test',secret_id="your secret id",
-           secret_key="your secret key", data={"a":"b"})
-    print data
-except TencentServerlessSDKException as e:
-    print e
-except TencentCloudSDKException as e:
-    print e
-except Exception as e:
-    print e
+def main_handler(event, context):
+    print("prepare to invoke a function!")
+    try:
+        data = scf.invoke('FuncInvoked', secret_id="AKIxxxxxxxxxxxxxxxxxxxxxxggB4Sa",
+             secret_key="3vZzxxxxxxxxxxxaeTC", region="ap-guangzhou",data={"a":"b"})
+        print (data)
+    except TencentServerlessSDKException as e:
+        print (e)
+    except TencentCloudSDKException as e:
+        print (e)
+    except Exception as e:
+        print (e)
+    return "Already invoked a function!" # return
+
+main_handler("","")
 ```
+进入scfSDK.py所在文件目录，执行函数查看结果：
+```shell
+python scfSDK.py
+```
+输出如下结果：
+```shell
+prepare to invoke a function!
+"Hello World form the function being invoked"
+```
+之后将scfSDK函数打包（需要包含tencentserverless pip包），上传到云端即可。
 
-云函数环境测试：
+如果需要频繁调用函数，则可以通过client的方式连接并触发。对应的scfSDK.py示例如下：
 ```python
-from tencentserverless.scf import invoke
+# -*- coding: utf8 -*-
+from tencentserverless.scf import Client
 from tencentserverless.exception import TencentServerlessSDKException
+from tencentcloud.common.exception.tencent_cloud_sdk_exception import TencentCloudSDKException
 
-try:
-    data = invoke('test', data={"a":"b"})
-    print data
-except TencentServerlessSDKException as e:
-    print e
-except TencentCloudSDKException as e:
-    print e
-except Exception as e:
-    print e
+scf = Client(secret_id="AKIxxxxxxxxxxxxxxxgB4Sa",
+             secret_key="3vZxxxxxxxxxxxxxxxxxxxxxeTC", region="ap-guangzhou")
+
+def main_handler(event, context):
+    print("prepare to invoke a function!")
+    try:
+        data = scf.invoke('FuncInvoked', data={"a": "b"})
+        print (data)
+    except TencentServerlessSDKException as e:
+        print (e)
+    except TencentCloudSDKException as e:
+        print (e)
+    except Exception as e:
+        print (e)
+    return "Already invoked a function!" # return
+
+main_handler("","")
 ```
 
-### Example02
+### 云端SDK函数互调(即将支持)
 
-本地测试：
-```python
-from tencentserverless.scf import client
-from tencentserverless.exception import TencentServerlessSDKException
-
-scf = client(secret_id="your secret id",
-           secret_key="your secret key")
-
-try:
-    data = scf.invoke('test',data={"a":"b"})
-    print data
-except TencentServerlessSDKException as e:
-    print e
-except TencentCloudSDKException as e:
-    print e
-except Exception as e:
-    print e
-```
-云函数环境测试：
-```python
-from tencentserverless.scf import client
-from tencentserverless.exception import TencentServerlessSDKException
-
-scf = client()
-
-try:
-    data = scf.invoke('test',data={"a":"b"})
-    print data
-except TencentServerlessSDKException as e:
-    print e
-except TencentCloudSDKException as e:
-    print e
-except Exception as e:
-    print e
-```
-
+SCF即将支持内置tencentserverless SDK，即可直接在云端进行函数互相调用。
 
 ## API Reference
 - [client](#client)
