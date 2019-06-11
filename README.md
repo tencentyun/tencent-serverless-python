@@ -2,14 +2,36 @@
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
-腾讯云云函数SDK，集成云函数业务流接口
+腾讯云无服务器云函数SDK，集成云函数业务流接口。
 
-## Install
+---------------
+
+## 什么是tencent-serverless-python
+
+tencent-serverless-python是腾讯云无服务器云函数SDK，集成云函数业务流接口。使用该SDK，用户可以方便快速的实现函数之间的调用，无需拼接公有云API接口。
+
+## 功能特性
+
+通过tencent serverless SDK，你可以：
+
+* 快速进行函数之间的调用
+* 填写必须的参数即可使用（sdk会默认获取本机的参数如region, secretId等）
+* 支持内网域名的访问
+* 支持keepalive能力
+
+## 运行环境
+
+tencent serverless SDK可以在 Windows、Linux、Mac 上运行。由于该SDK基于 Python 开发完成，因此在安装及运行前需要系统中安装有 Python 环境和pip。此外，该SDK也可以直接在云端进行调用。
+
+## 安装tencent serverless SDK
+
 ```shell
 pip install tencentserverless
 ```
 
-## Example01
+## 使用示例
+
+### Example01
 
 本地测试：
 ```python
@@ -44,7 +66,7 @@ except Exception as e:
     print e
 ```
 
-## Example02
+### Example02
 
 本地测试：
 ```python
