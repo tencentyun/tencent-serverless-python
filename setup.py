@@ -18,14 +18,15 @@ def read_requirements(req='requirements.txt'):
 
 setuptools.setup(
     name='tencentserverless',
-    version='0.1.0',
+    version='0.1.3',
     keywords='scf',
     description='This is callFunction for SCF.',
-    long_description=open(
+    long_description_content_type='text/markdown',
+    long_description=io.open(
         os.path.join(
             os.path.dirname(__file__),
-            'README.rst'
-        )
+            'README.md'
+        ), encoding='utf-8'
     ).read(),
     author='Tencent Cloud',
     author_email='qcloud_middleware@qq.com',
