@@ -55,7 +55,7 @@ def main_handler(event, context):
         print("value1 = " + event['key1'])
     if 'key2' in event.keys():
         print("value2 = " + event['key2'])
-    return "Hello World form the function being invoked"  #return
+    return "Hello World from the function being invoked"  #return
 ```
 创建完毕后，本地创建一个名为scfSDK.py的函数，内容如下：
 ```python
