@@ -23,6 +23,7 @@ class Client(object):
     ~~~~~~~~~~~~~~
     This class default a client for scf api
     """
+
     def __init__(self,
                  region=None,
                  secret_id=None,
@@ -93,6 +94,39 @@ class Client(object):
                                                 response=res,
                                                 request_id=res["Response"]['RequestId'])
 
+    def __getattr__(self, attr_name):
+        def wrap(*l, **args):
+            log_type = None
+            if 'log_type' in args:
+                log_type = args['log_type']
+                del args['log_type']
+            invocation_type = None
+            if 'invocation_type' in args:
+                invocation_type = args['invocation_type']
+                del args['invocation_type']
+
+            qualifier = '$LATEST'
+            if 'qualifier' in args:
+                qualifier = args['qualifier']
+                del args['qualifier']
+
+            namespace = 'default'
+            if 'namespace' in args:
+                namespace = args['namespace']
+                del args['namespace']
+
+            return self.invoke(function_name=attr_name, namespace=namespace,
+                               qualifier=qualifier,
+                               log_type=log_type,
+                               invocation_type=invocation_type, data=args)
+        return wrap
+
+    def __getitem__(self, attr_name):
+        return self.__getattr__(attr_name)
+
+    def call(self, attr_name):
+        return self.__getattr__(attr_name)
+
 
 def invoke(function_name,
            region=None,
@@ -104,7 +138,6 @@ def invoke(function_name,
            qualifier="$LATEST",
            invocation_type="RequestResponse",
            data=None):
-
     client = Client(region=region, secret_id=secret_id, secret_key=secret_key, token=token)
     return client.invoke(function_name=function_name, namespace=namespace, log_type=log_type,
                          qualifier=qualifier, invocation_type=invocation_type, data=data)
