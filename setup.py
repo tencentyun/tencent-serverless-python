@@ -18,7 +18,7 @@ def read_requirements(req='requirements.txt'):
 
 setuptools.setup(
     name='tencentserverless',
-    version='0.1.4',
+    version='0.1.5',
     keywords='scf',
     description='This is callFunction for SCF.',
     long_description_content_type='text/markdown',
