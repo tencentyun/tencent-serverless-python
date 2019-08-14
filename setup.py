@@ -18,7 +18,7 @@ def read_requirements(req='requirements.txt'):
 
 setuptools.setup(
     name='tencentserverless',
-    version='0.1.5',
+    version='0.1.6',
     keywords='scf',
     description='This is callFunction for SCF.',
     long_description_content_type='text/markdown',
@@ -30,7 +30,7 @@ setuptools.setup(
     ).read(),
     author='Tencent Cloud',
     author_email='qcloud_middleware@qq.com',
-    url='https://github.com/alanoluo/tencent-serverless-python.git',
+    url='https://github.com/tencentyun/tencent-serverless-python',
     packages=setuptools.find_packages(),
     install_requires=read_requirements('requirements.txt'),
     license='Apache License 2.0'
