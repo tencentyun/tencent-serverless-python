@@ -30,16 +30,31 @@ class Client(object):
                  secret_key=None,
                  token=None):
 
-        self.region = region if region is not None \
+        self.region = region
+
+        self.secret_id = secret_id
+
+        self.secret_key = secret_key
+
+        self.token = token
+
+    def invoke(self, function_name,
+               namespace="default",
+               log_type="None",
+               qualifier="$LATEST",
+               invocation_type="RequestResponse",
+               data=None):
+
+        self.region = self.region if self.region is not None \
             else os.environ.get("TENCENTCLOUD_REGION", "ap-guangzhou")
 
-        self.secret_id = secret_id if secret_id is not None \
+        self.secret_id = self.secret_id if self.secret_id is not None \
             else os.environ.get("TENCENTCLOUD_SECRETID", None)
 
-        self.secret_key = secret_key if secret_key is not None \
+        self.secret_key = self.secret_key if self.secret_key is not None \
             else os.environ.get("TENCENTCLOUD_SECRETKEY", None)
 
-        self.token = token if token is not None \
+        self.token = self.token if self.token is not None \
             else os.environ.get("TENCENTCLOUD_SESSIONTOKEN", None)
 
         self.env = os.environ.get("TENCENTCLOUD_RUNENV", None)
@@ -48,15 +63,8 @@ class Client(object):
             else "scf.tencentcloudapi.com"
 
         cred = credential.Credential(self.secret_id, self.secret_key, self.token)
-        profile = ClientProfile(httpProfile=HttpProfile(reqTimeout=300, keepAlive=True))
-        self.client = scf_client.ScfClient(cred, self.region, profile=profile)
-
-    def invoke(self, function_name,
-               namespace="default",
-               log_type="None",
-               qualifier="$LATEST",
-               invocation_type="RequestResponse",
-               data=None):
+        self.profile = ClientProfile(httpProfile=HttpProfile(endpoint=self.endpoint, reqTimeout=300, keepAlive=True))
+        self.client = scf_client.ScfClient(cred, self.region, profile=self.profile)
 
         client_context = None
         if data:
